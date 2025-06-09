@@ -4,27 +4,89 @@ Esta é uma aplicação Python simples que interage com o ChatGPT usando um prom
 
 ## Pré-requisitos
 
+- Python 3.9 ou superior
 - Docker instalado no seu sistema
 - Chave de API da OpenAI
 - Conta no Docker Hub (para CI/CD)
 
+## Configuração do Ambiente
+
+### 1. Configuração Local
+
+1. Clone o repositório:
+```bash
+git clone [URL_DO_REPOSITÓRIO]
+cd [NOME_DO_DIRETÓRIO]
+```
+
+2. Crie e ative um ambiente virtual:
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# ou
+.\venv\Scripts\activate  # Windows
+```
+
+3. Instale as dependências:
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configuração do Docker Hub
+
+1. Crie uma conta no Docker Hub (se ainda não tiver):
+   - Acesse https://hub.docker.com/
+   - Clique em "Sign Up" e siga as instruções
+
+2. Crie um token de acesso:
+   - Faça login no Docker Hub
+   - Vá em "Account Settings" > "Security"
+   - Clique em "New Access Token"
+   - Dê um nome ao token (ex: "github-actions")
+   - Copie o token gerado
+
+3. Configure os secrets no GitHub:
+   - Vá para seu repositório no GitHub
+   - Clique em "Settings" > "Secrets and variables" > "Actions"
+   - Adicione os seguintes secrets:
+     - `DOCKER_USERNAME`: seu nome de usuário do Docker Hub
+     - `DOCKER_PASSWORD`: seu token de acesso do Docker Hub
+
 ## Como Executar
+
+### Executando Localmente
+
+1. Configure sua chave da OpenAI:
+```bash
+export OPENAI_API_KEY="sua_chave_api_aqui"
+```
+
+2. Execute o script:
+```bash
+python app.py
+```
+
+### Executando com Docker
 
 1. Construa a imagem Docker:
 ```bash
 docker build -t chatgpt-app .
 ```
 
-2. Execute o container com sua chave de API da OpenAI:
+2. Execute o container:
 ```bash
-docker run -e OPENAI_API_KEY=sua_chave_api_aqui chatgpt-app
+docker run -e OPENAI_API_KEY="sua_chave_api_aqui" chatgpt-app
 ```
-
-Substitua `sua_chave_api_aqui` pela sua chave de API real da OpenAI.
 
 ## Personalizando o Prompt
 
-Para alterar o prompt, modifique a variável `prompt` no arquivo `app.py` e reconstrua a imagem Docker.
+Para alterar o prompt, modifique a variável `prompt` no arquivo `app.py`:
+
+```python
+def get_chatgpt_response():
+    prompt = "Seu novo prompt aqui"
+    # ... resto do código
+```
 
 ## Pipeline CI/CD
 
@@ -34,16 +96,9 @@ Este projeto inclui um workflow do GitHub Actions que:
 2. Constrói a imagem Docker
 3. Publica a imagem no Docker Hub
 
-O workflow é executado em:
+O workflow é executado automaticamente em:
 - Push para a branch main
 - Pull requests para a branch main
-
-### Configuração do CI/CD
-
-Para que o pipeline funcione corretamente, você precisa configurar os seguintes secrets no seu repositório GitHub:
-
-- `DOCKER_USERNAME`: Seu nome de usuário no Docker Hub
-- `DOCKER_PASSWORD`: Sua senha do Docker Hub
 
 ### Acessando a Imagem do Container
 
@@ -53,4 +108,20 @@ Após uma execução bem-sucedida do workflow, você pode baixar a imagem do Doc
 docker pull seu_usuario/chatgpt-app:latest
 ```
 
-Substitua `seu_usuario` pelo seu nome de usuário no Docker Hub.
+## Solução de Problemas
+
+### Erro de Autenticação
+- Verifique se sua chave da OpenAI está correta
+- Certifique-se de que a chave está sendo passada corretamente como variável de ambiente
+
+### Erro no Docker Hub
+- Verifique se as credenciais do Docker Hub estão configuradas corretamente nos secrets do GitHub
+- Confirme se o token de acesso do Docker Hub é válido
+
+## Contribuindo
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
