@@ -6,7 +6,7 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def get_chatgpt_response():
     # Fixed prompt that will be sent to ChatGPT
-    prompt = "What are the three laws of robotics?"
+    prompt = "Me fale sobre Silvio Santos"
     
     try:
         # Make the API call to ChatGPT
