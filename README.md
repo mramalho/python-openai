@@ -94,7 +94,9 @@ Este projeto inclui um workflow do GitHub Actions que:
 
 1. Valida o código usando flake8
 2. Constrói a imagem Docker
-3. Publica a imagem no Docker Hub
+3. Publica a imagem no Docker Hub com duas tags:
+   - `latest`: sempre aponta para a última versão na branch main
+   - `[hash]`: tag com o hash do commit atual
 
 O workflow é executado automaticamente em:
 - Push para a branch main
@@ -102,10 +104,16 @@ O workflow é executado automaticamente em:
 
 ### Acessando a Imagem do Container
 
-Após uma execução bem-sucedida do workflow, você pode baixar a imagem do Docker Hub:
+Após uma execução bem-sucedida do workflow, você pode baixar a imagem do Docker Hub de duas formas:
 
+1. Última versão:
 ```bash
 docker pull seu_usuario/chatgpt-app:latest
+```
+
+2. Versão específica (usando o hash do commit):
+```bash
+docker pull seu_usuario/chatgpt-app:a1b2c3d
 ```
 
 ## Solução de Problemas
